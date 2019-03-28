@@ -6,6 +6,7 @@ logo.src = 'italian.png'
 const container = document.createElement('div')
 container.setAttribute('class', 'container')
 
+const list =
 app.appendChild(logo)
 app.appendChild(container)
 
@@ -18,35 +19,41 @@ request.open('GET', url, true);
 request.onload = function displayRecipe(){
     const data = JSON.parse(this.response);
     if(request.status >= 200 && request.status < 400) {
+       
+        //combining measure and ingredients
         for(let i = 1; i <= 20; i++) {
             const ing = `strIngredient${i}`;
             const mes = `strMeasure${i}`;
             
             const ingredient = data.meals[0][ing];
             const measure = data.meals[0][mes];
-
+            
             if(ingredient === "") {
                 break;
             }
-            
-            
 
-        }
+          console.log(measure + " " + ingredient);  
+            
+       
+    }
+    //placing JSON in card
     data.meals.forEach(meal => {
         const card = document.createElement('div');
         card.setAttribute('class','card');
 
-        const h1 = document.createElement('h1');
-        h1.textContent = meal.strMeal;
+        const name = document.createElement('h1');
+        name.textContent = meal.strMeal;
 
-        const p = document.createElement('p');
-        const instr = document.createTextNode("Instructions:");
-        p.textContent = meal.strInstructions;
+        const instructions = document.createElement('p');
+        instructions.textContent = meal.strInstructions;
+        
+        const foodItems = document.createElement('li');
+        foodItems.textContent = meal.items;
 
         container.appendChild(card);
-        card.appendChild(h1);
-        p.appendChild(instr);
-        card.appendChild(p);
+        card.appendChild(name);
+        card.appendChild(foodItems);
+        card.appendChild(instructions);
         
 
     });
