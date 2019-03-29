@@ -16,28 +16,31 @@ const url= 'https://www.themealdb.com/api/json/v1/1/random.php';
 request.open('GET', url, true);
 
 
+
 request.onload = function displayRecipe(){
     const data = JSON.parse(this.response);
     if(request.status >= 200 && request.status < 400) {
        
         //combining measure and ingredients
+        function allItems(){
         for(let i = 1; i <= 20; i++) {
             const ing = `strIngredient${i}`;
             const mes = `strMeasure${i}`;
             
             const ingredient = data.meals[0][ing];
             const measure = data.meals[0][mes];
+            const itemArray = [measure + " " + ingredient];
             
             if(ingredient === "") {
                 break;
             }
-
-          console.log(measure + " " + ingredient);  
             
-       
+            return itemArray;
+        }    
     }
     //placing JSON in card
     data.meals.forEach(meal => {
+        
         const card = document.createElement('div');
         card.setAttribute('class','card');
 
@@ -47,15 +50,17 @@ request.onload = function displayRecipe(){
         const instructions = document.createElement('p');
         instructions.textContent = meal.strInstructions;
         
+        
+        
         const foodItems = document.createElement('li');
-        foodItems.textContent = meal.items;
+        foodItems.textContent = allItems();
 
         container.appendChild(card);
         card.appendChild(name);
         card.appendChild(foodItems);
         card.appendChild(instructions);
         
-
+            
     });
 } else{
     const errorMessage = document.createElement('marquee');
